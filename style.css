@@ -24,7 +24,7 @@ body {
     border-right: 1px solid #dee2e6;
 }
 
-/* --- CONTEÚDO PRINCIPAL (FORMULÁRIO) --- */
+/* --- CONTEÚDO PRINCIPAL --- */
 #main-content {
     margin-left: 240px; /* Afasta o conteúdo para dar espaço ao sidebar */
     width: 100%;
@@ -55,7 +55,7 @@ h1 {
 .nav-tab {
     display: block;
     width: 100%;
-    text-align: left; /* Alinha o texto do botão à esquerda */
+    text-align: left;
     background-color: transparent;
     color: #495057; /* Cor de texto inativo */
     padding: 12px 15px;
@@ -77,7 +77,50 @@ h1 {
 }
 
 .nav-tab:hover:not(.active) {
-    background-color: #f8f9fa; /* Fundo ultra suave no hover */
+    background-color: #f8f9fa; 
+    color: #343a40;
+}
+
+/* --- ESTILOS DE CONTROLES (1/2/3 DIAS) --- */
+#controls {
+    padding: 0 20px;
+    text-align: left;
+}
+
+#controls h2 {
+    font-size: 14px;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #f0f0f0; 
+}
+
+.control-button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-size: 15px;
+    color: #495057;
+    transition: background-color 0.2s, color 0.2s;
+    border-left: 4px solid transparent; 
+}
+
+.control-button.active {
+    background-color: #e9ecef;
+    color: #007bff !important;
+    font-weight: 700;
+    border-left: 4px solid #007bff !important;
+}
+
+.control-button:hover:not(.active) {
+    background-color: #f0f0f0;
     color: #343a40;
 }
 
@@ -85,7 +128,7 @@ h1 {
 
 .form-container {
     max-width: 500px;
-    margin: 30px auto; /* Centraliza o formulário */
+    margin: 30px auto; 
     padding: 30px;
     background-color: #ffffff;
     border-radius: 8px;
@@ -161,50 +204,9 @@ h1 {
     cursor: pointer !important;
 }
 
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 colunas (dias da semana) */
-    gap: 5px;
-    max-width: 900px;
-    margin: 0 auto;
-    background-color: white; /* Garante fundo branco para todo o grid */
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-.day-label {
-    text-align: center;
-    font-size: 0.85em;
-    padding: 8px 0;
-    font-weight: 700;
-    color: #495057; 
-    border-bottom: 2px solid #007bff; /* Linha de separação */
-    margin-bottom: 5px;
-}
+/* --- ESTILOS DO CALENDÁRIO INTERATIVO --- */
 
-.calendar-day {
-    border: 1px solid #ddd;
-    padding: 10px 5px;
-    border-radius: 4px;
-    text-align: center;
-    min-height: 80px;
-    background-color: white;
-}
-.scheduled-day {
-    background-color: #d4edda;
-    border-color: #28a745;
-}
-.day-number {
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-bottom: 5px;
-}
-.appointment-names {
-    font-size: 0.8em;
-    color: #007bff;
-    line-height: 1.2;
-}
-
+/* Contêiner Geral do Calendário (Para centralização) */
 #calendar-controls {
     display: flex;
     justify-content: space-between;
@@ -227,21 +229,40 @@ h1 {
     transition: background-color 0.2s;
 }
 
-/* Estrutura do Grid */
+/* Estrutura do Grid e Cabeçalho (CORREÇÃO DE ALINHAMENTO) */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr); /* 7 colunas (dias da semana) */
     gap: 5px;
     max-width: 900px;
     margin: 0 auto;
+    background-color: white; /* Garante fundo branco para todo o grid */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+/* Cabeçalho da Semana (Dom, Seg, ...) - Parte 1 do Grid */
+.day-label {
+    text-align: center;
+    font-size: 0.9em;
+    padding: 5px 0;
+    font-weight: 700;
+    color: #495057; 
+    border-bottom: 2px solid #007bff; /* Linha de separação */
+    margin-bottom: 5px;
+    /* Garante que o rótulo da semana preencha a célula corretamente */
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Células de Dias do Mês (Parte 2 do Grid) */
 .calendar-day {
-    border: 1px solid #e9ecef;
+    border: 1px solid #ddd;
     padding: 10px 5px;
     border-radius: 4px;
     min-height: 80px;
-    background-color: #ffffff;
     text-align: center;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     transition: background-color 0.2s;
@@ -251,14 +272,14 @@ h1 {
     background-color: #f0f0f0;
 }
 
-.calendar-day .day-number {
+.day-number {
     font-weight: bold;
     font-size: 1.2em;
     margin-bottom: 5px;
     color: #495057;
 }
 
-.calendar-day .appointment-names {
+.appointment-names {
     font-size: 0.85em;
     color: #007bff; /* Nome do aluno em azul */
     line-height: 1.2;
@@ -279,7 +300,6 @@ h1 {
 .professional-form textarea {
     resize: vertical;
     min-height: 80px; 
-    /* Adicione as mesmas propriedades de borda e padding dos outros inputs */
     width: 100%;
     padding: 12px;
     border: 1px solid #ced4da;
@@ -291,18 +311,18 @@ h1 {
 }
 
 .calendar-header-row {
+    /* ADICIONE ESTAS REGRAS SE ESTIVEREM FALTANDO */
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* Mesma estrutura de grid dos dias */
-    margin-bottom: 5px;
+    grid-template-columns: repeat(7, 1fr); /* CRUCIAL: 7 colunas */
+    gap: 5px; /* CRUCIAL: O mesmo espaçamento do grid dos dias */
+    max-width: 900px;
+    margin: 0 auto; /* Centraliza o cabeçalho */
+    
+    /* Estilos Visuais */
     font-weight: 700;
-    color: #495057; /* Cor do texto padrão */
-    background-color: #e9ecef; /* Fundo suave para o cabeçalho */
+    color: #495057; 
+    background-color: #e9ecef; 
     border-radius: 4px;
     padding: 5px 0;
-}
-
-.day-label {
-    text-align: center;
-    font-size: 0.9em;
-    padding: 5px 0;
+    margin-bottom: 5px; 
 }

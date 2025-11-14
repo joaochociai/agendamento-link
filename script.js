@@ -117,30 +117,30 @@ function changeMonth(offset) {
     loadCalendarData(); // Recarrega os dados com o novo contexto de mês
 }
 
-// --- FUNÇÃO PARA RENDERIZAR O CALENDÁRIO (CORREÇÃO FINAL DE FORMATO ISO) ---
+// --- FUNÇÃO PARA RENDERIZAR O CALENDÁRIO (CORRIGIDA COM CABEÇALHO DOMINGO) ---
 function renderCalendar(agendamentos) {
     const calendarView = document.getElementById('calendar-view');
+    const today = new Date();
     
-    // Filtra e renderiza com base na variável global currentCalendarDate
+    // 1. Definições de Mês e Ano
     const renderMonthIndex = currentCalendarDate.getMonth();
     const renderYear = currentCalendarDate.getFullYear();
     const renderMonthName = MONTHS[renderMonthIndex];
+    const renderMonth = String(renderMonthIndex + 1).padStart(2, '0');
+    const daysInMonth = new Date(renderYear, renderMonthIndex + 1, 0).getDate(); 
+    
+    // Calcula o dia da semana do 1º dia do mês (0=Dom, 1=Seg...)
+    let firstDayOfMonth = new Date(renderYear, renderMonthIndex, 1).getDay(); 
 
     // Atualiza o título dos controles
     document.getElementById('currentMonthDisplay').textContent = `${renderMonthName} ${renderYear}`;
     
-    const renderMonth = String(renderMonthIndex + 1).padStart(2, '0');
-    const daysInMonth = new Date(renderYear, renderMonthIndex + 1, 0).getDate(); 
-
-    
-    
-    // 1. Cria um mapa de agendamentos por data (DD/MM/YYYY)
+    // Cria o mapa de agendamentos (lógica anterior)
     const appointmentsByDate = agendamentos.reduce((acc, item) => {
         const dateObject = new Date(item.DataGerarLink); 
         const dateKey = formatDate(dateObject); 
         const firstName = item.Nome ? item.Nome.split(' ')[0] : 'Aluno'; 
 
-        // CRUCIAL: Filtra apenas os agendamentos do mês/ano ATUALMENTE SELECIONADO
         if (dateObject.getFullYear() === renderYear && dateObject.getMonth() === renderMonthIndex) {
             if (!acc[dateKey]) {
                 acc[dateKey] = [];
@@ -150,17 +150,30 @@ function renderCalendar(agendamentos) {
         return acc;
     }, {});
     
-    // 2. Inicia a construção visual
-    const firstDayOfMonth = new Date(renderYear, renderMonthIndex, 1).getDay(); // 0=Dom, 1=Seg...
+    
+    // --- INÍCIO DA CONSTRUÇÃO VISUAL ---
     let html = '';
+    
+    // ORDEM DOS DIAS (DOMINGO a SÁBADO)
+    const DAYS_OF_WEEK = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+    // 1. INSERE O CABEÇALHO DA SEMANA
+    html += '<div class="calendar-header-row">';
+    DAYS_OF_WEEK.forEach(day => {
+        html += `<div class="day-label">${day}</div>`;
+    });
+    html += '</div>';
+    
+    // 2. INICIA O GRID DE DIAS E CÉLULAS VAZIAS (OFFSET)
     html += '<div class="calendar-grid">';
 
-    // Adiciona células vazias para preencher o início da semana
+    // Adiciona células vazias (offset)
+    // O valor 'firstDayOfMonth' (0 para Dom, 1 para Seg) é usado diretamente
     for (let i = 0; i < firstDayOfMonth; i++) {
         html += `<div class="calendar-day empty-day"></div>`;
     }
 
-    // Loop para gerar os dias do mês
+    // 3. DIAS DO MÊS
     for (let day = 1; day <= daysInMonth; day++) { 
         const dayString = String(day).padStart(2, '0');
         const dateKey = `${dayString}/${renderMonth}/${renderYear}`; 
