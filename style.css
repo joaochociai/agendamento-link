@@ -1,0 +1,308 @@
+/* --- PALETA DE CORES CLEAN --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: #f8f9fa; /* Fundo branco limpo */
+    color: #343a40; /* Texto principal escuro */
+    display: flex; /* Habilita Flexbox para layout principal */
+    min-height: 100vh;
+}
+
+/* --- BARRA LATERAL FIXA (MENU) --- */
+#sidebar-menu {
+    width: 240px; 
+    background-color: #ffffff; /* Fundo Branco Sólido */
+    color: #343a40; 
+    padding: 30px 0;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05); /* Sombra suave */
+    position: fixed; /* Fixa o sidebar */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    border-right: 1px solid #dee2e6;
+}
+
+/* --- CONTEÚDO PRINCIPAL (FORMULÁRIO) --- */
+#main-content {
+    margin-left: 240px; /* Afasta o conteúdo para dar espaço ao sidebar */
+    width: 100%;
+    padding: 30px 20px;
+    box-sizing: border-box; 
+    text-align: center;
+}
+
+h1 {
+    color: #007bff;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+/* --- ESTILIZAÇÃO DAS ABAS DE NAVEGAÇÃO --- */
+#nav-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.nav-tab {
+    display: block;
+    width: 100%;
+    text-align: left; /* Alinha o texto do botão à esquerda */
+    background-color: transparent;
+    color: #495057; /* Cor de texto inativo */
+    padding: 12px 15px;
+    margin-bottom: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+    border-left: 4px solid transparent; /* Espaço para o destaque */
+}
+
+/* ESTADO ATIVO (Cor Sólida no Selecionado) */
+.nav-tab.active {
+    background-color: #e9ecef; /* Fundo cinza suave no ativo */
+    color: #007bff; /* Texto Azul no ativo */
+    font-weight: 700;
+    border-left: 4px solid #007bff; /* Linha de destaque azul */
+}
+
+.nav-tab:hover:not(.active) {
+    background-color: #f8f9fa; /* Fundo ultra suave no hover */
+    color: #343a40;
+}
+
+/* --- ESTILOS DO FORMULÁRIO DE AGENDAMENTO --- */
+
+.form-container {
+    max-width: 500px;
+    margin: 30px auto; /* Centraliza o formulário */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: left;
+}
+
+.professional-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+/* Estilos dos Inputs e Select */
+.professional-form input,
+.professional-form select,
+.professional-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.2s;
+    margin-bottom: 5px;
+}
+
+.professional-form input:focus,
+.professional-form select:focus,
+.professional-form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.professional-form label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 10px;
+}
+
+/* Estilo do Botão de Envio */
+.professional-form button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 15px;
+}
+
+.professional-form button[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+/* Regras de Esconder/Mostrar Aba */
+.tab-content {
+    min-height: 80vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Estilo para flatpickr (para garantir que seja clicável) */
+.flatpickr-input {
+    background-color: #fff !important; 
+    cursor: pointer !important;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 colunas (dias da semana) */
+    gap: 5px;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white; /* Garante fundo branco para todo o grid */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.day-label {
+    text-align: center;
+    font-size: 0.85em;
+    padding: 8px 0;
+    font-weight: 700;
+    color: #495057; 
+    border-bottom: 2px solid #007bff; /* Linha de separação */
+    margin-bottom: 5px;
+}
+
+.calendar-day {
+    border: 1px solid #ddd;
+    padding: 10px 5px;
+    border-radius: 4px;
+    text-align: center;
+    min-height: 80px;
+    background-color: white;
+}
+.scheduled-day {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+.day-number {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+.appointment-names {
+    font-size: 0.8em;
+    color: #007bff;
+    line-height: 1.2;
+}
+
+#calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 900px;
+    margin: 20px auto 30px auto;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #343a40;
+}
+
+#calendar-controls button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+/* Estrutura do Grid */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 colunas (dias da semana) */
+    gap: 5px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.calendar-day {
+    border: 1px solid #e9ecef;
+    padding: 10px 5px;
+    border-radius: 4px;
+    min-height: 80px;
+    background-color: #ffffff;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s;
+}
+
+.calendar-day:hover {
+    background-color: #f0f0f0;
+}
+
+.calendar-day .day-number {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+.calendar-day .appointment-names {
+    font-size: 0.85em;
+    color: #007bff; /* Nome do aluno em azul */
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+/* Destaque para dias agendados */
+.scheduled-day {
+    background-color: #d4edda; /* Verde Claro */
+    border-color: #28a745;
+}
+
+.empty-day {
+    background-color: #f8f9fa; /* Dias vazios */
+    border: none;
+}
+
+.professional-form textarea {
+    resize: vertical;
+    min-height: 80px; 
+    /* Adicione as mesmas propriedades de borda e padding dos outros inputs */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.2s;
+    margin-bottom: 5px;
+}
+
+.calendar-header-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Mesma estrutura de grid dos dias */
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: #495057; /* Cor do texto padrão */
+    background-color: #e9ecef; /* Fundo suave para o cabeçalho */
+    border-radius: 4px;
+    padding: 5px 0;
+}
+
+.day-label {
+    text-align: center;
+    font-size: 0.9em;
+    padding: 5px 0;
+}
