@@ -3,30 +3,39 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 0;
     margin: 0;
-    background-color: #f8f9fa; /* Fundo branco limpo */
-    color: #343a40; /* Texto principal escuro */
-    display: flex; /* Habilita Flexbox para layout principal */
+    background-color: #f8f9fa; 
+    color: #343a40; 
+    display: flex; 
     min-height: 100vh;
 }
 
 /* --- BARRA LATERAL FIXA (MENU) --- */
 #sidebar-menu {
     width: 240px; 
-    background-color: #ffffff; /* Fundo Branco Sólido */
+    background-color: #ffffff; 
     color: #343a40; 
-    padding: 30px 0;
-    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05); /* Sombra suave */
-    position: fixed; /* Fixa o sidebar */
+    padding: 30px 10px; /* Ajustado para 10px nas laterais */
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 100;
     border-right: 1px solid #dee2e6;
+    border-radius: 30px;
+    text-align: center;
+}
+
+#sidebar-logo {
+    width: 150px; 
+    height: auto;
+    display: block;
+    margin: 0 auto 25px auto; 
 }
 
 /* --- CONTEÚDO PRINCIPAL --- */
 #main-content {
-    margin-left: 240px; /* Afasta o conteúdo para dar espaço ao sidebar */
+    margin-left: 240px; 
     width: 100%;
     padding: 30px 20px;
     box-sizing: border-box; 
@@ -48,7 +57,7 @@ h1 {
 #nav-menu {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 0 10px;
     margin-bottom: 30px;
 }
 
@@ -57,7 +66,7 @@ h1 {
     width: 100%;
     text-align: left;
     background-color: transparent;
-    color: #495057; /* Cor de texto inativo */
+    color: #495057; 
     padding: 12px 15px;
     margin-bottom: 5px;
     border: none;
@@ -65,15 +74,14 @@ h1 {
     font-size: 16px;
     border-radius: 4px;
     transition: all 0.3s ease-in-out;
-    border-left: 4px solid transparent; /* Espaço para o destaque */
+    border-left: 4px solid transparent; 
 }
 
-/* ESTADO ATIVO (Cor Sólida no Selecionado) */
 .nav-tab.active {
-    background-color: #e9ecef; /* Fundo cinza suave no ativo */
-    color: #007bff; /* Texto Azul no ativo */
+    background-color: #e9ecef; 
+    color: #007bff; 
     font-weight: 700;
-    border-left: 4px solid #007bff; /* Linha de destaque azul */
+    border-left: 4px solid #007bff;
 }
 
 .nav-tab:hover:not(.active) {
@@ -81,51 +89,16 @@ h1 {
     color: #343a40;
 }
 
-/* --- ESTILOS DE CONTROLES (1/2/3 DIAS) --- */
-#controls {
-    padding: 0 20px;
-    text-align: left;
+/* Regras de Esconder/Mostrar Aba */
+.tab-content {
+    min-height: 80vh;
 }
 
-#controls h2 {
-    font-size: 14px;
-    color: #6c757d;
-    text-transform: uppercase;
-    font-weight: 600;
-    padding: 10px;
-    margin-bottom: 5px;
-    border-bottom: 1px solid #f0f0f0; 
-}
-
-.control-button {
-    display: block;
-    width: 100%;
-    padding: 10px 15px;
-    margin: 5px 0;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    text-align: left;
-    font-size: 15px;
-    color: #495057;
-    transition: background-color 0.2s, color 0.2s;
-    border-left: 4px solid transparent; 
-}
-
-.control-button.active {
-    background-color: #e9ecef;
-    color: #007bff !important;
-    font-weight: 700;
-    border-left: 4px solid #007bff !important;
-}
-
-.control-button:hover:not(.active) {
-    background-color: #f0f0f0;
-    color: #343a40;
+.hidden {
+    display: none !important;
 }
 
 /* --- ESTILOS DO FORMULÁRIO DE AGENDAMENTO --- */
-
 .form-container {
     max-width: 500px;
     margin: 30px auto; 
@@ -142,7 +115,6 @@ h1 {
     gap: 15px; 
 }
 
-/* Estilos dos Inputs e Select */
 .professional-form input,
 .professional-form select,
 .professional-form textarea {
@@ -170,7 +142,6 @@ h1 {
     margin-top: 10px;
 }
 
-/* Estilo do Botão de Envio */
 .professional-form button[type="submit"] {
     background-color: #007bff;
     color: white;
@@ -189,16 +160,12 @@ h1 {
     transform: translateY(-1px);
 }
 
-/* Regras de Esconder/Mostrar Aba */
-.tab-content {
-    min-height: 80vh;
+#form-message {
+    font-size: 15px;
+    font-weight: 600;
 }
 
-.hidden {
-    display: none !important;
-}
-
-/* Estilo para flatpickr (para garantir que seja clicável) */
+/* Estilo para flatpickr */
 .flatpickr-input {
     background-color: #fff !important; 
     cursor: pointer !important;
@@ -206,7 +173,6 @@ h1 {
 
 /* --- ESTILOS DO CALENDÁRIO INTERATIVO --- */
 
-/* Contêiner Geral do Calendário (Para centralização) */
 #calendar-controls {
     display: flex;
     justify-content: space-between;
@@ -229,42 +195,65 @@ h1 {
     transition: background-color 0.2s;
 }
 
-/* Estrutura do Grid e Cabeçalho (CORREÇÃO DE ALINHAMENTO) */
-.calendar-grid {
+/* NOVO: Estilo do Loader (Spinner) */
+.loader {
+    border: 8px solid #f3f3f3; /* Cinza claro */
+    border-top: 8px solid #007bff; /* Azul do tema */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 50px auto; /* Centraliza o loader */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Cabeçalho da Semana (Dom, Seg, ...) */
+.calendar-header-row {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 colunas (dias da semana) */
+    grid-template-columns: repeat(7, 1fr);
     gap: 5px;
     max-width: 900px;
     margin: 0 auto;
-    background-color: white; /* Garante fundo branco para todo o grid */
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-weight: 700;
+    color: #495057; 
+    background-color: #e9ecef; 
+    border-radius: 4px;
+    padding: 5px 0;
+    margin-bottom: 5px; 
 }
 
-/* Cabeçalho da Semana (Dom, Seg, ...) - Parte 1 do Grid */
 .day-label {
     text-align: center;
     font-size: 0.9em;
     padding: 5px 0;
-    font-weight: 700;
-    color: #495057; 
-    border-bottom: 2px solid #007bff; /* Linha de separação */
-    margin-bottom: 5px;
-    /* Garante que o rótulo da semana preencha a célula corretamente */
     display: block;
     justify-content: center;
     align-items: center;
 }
 
-/* Células de Dias do Mês (Parte 2 do Grid) */
+/* Grid dos Dias */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 5px;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white; 
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
 .calendar-day {
     border: 1px solid #ddd;
     padding: 10px 5px;
     border-radius: 4px;
     min-height: 80px;
     text-align: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     transition: background-color 0.2s;
 }
 
@@ -281,48 +270,127 @@ h1 {
 
 .appointment-names {
     font-size: 0.85em;
-    color: #007bff; /* Nome do aluno em azul */
+    color: #007bff; 
     line-height: 1.2;
     font-weight: 600;
 }
 
-/* Destaque para dias agendados */
 .scheduled-day {
-    background-color: #d4edda; /* Verde Claro */
+    background-color: #d4edda; 
     border-color: #28a745;
 }
 
 .empty-day {
-    background-color: #f8f9fa; /* Dias vazios */
+    background-color: #f8f9fa; 
     border: none;
+    box-shadow: none;
 }
 
-.professional-form textarea {
-    resize: vertical;
-    min-height: 80px; 
+/* Destaque do Dia Atual */
+.calendar-day.today-highlight-calendar {
+    border: 3px solid #007bff !important; 
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4); 
+    background-color: #f0f8ff; 
+}
+
+/* Banner de Alerta */
+#notification-banner {
+    position: sticky;
+    top: 20px; 
+    z-index: 90; 
+    padding: 15px 20px;
+    margin: 0 auto 20px auto; 
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    background-color: #fff3cd; 
+    color: #856404; 
+    border: 1px solid #ffeeba;
+    font-weight: 600;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease;
+}
+
+.hidden-alert {
+    display: none;
+    opacity: 0;
+}
+
+/* Por padrão, o modal começa escondido */
+.modal-hidden {
+    display: none;
+}
+
+/* O fundo escurecido (overlay) */
+#modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 16px;
-    transition: border-color 0.2s;
-    margin-bottom: 5px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escurecido */
+    z-index: 1000;
+    display: flex; /* Usamos flex para centralizar a caixa */
+    justify-content: center;
+    align-items: center;
 }
 
-.calendar-header-row {
-    /* ADICIONE ESTAS REGRAS SE ESTIVEREM FALTANDO */
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); /* CRUCIAL: 7 colunas */
-    gap: 5px; /* CRUCIAL: O mesmo espaçamento do grid dos dias */
-    max-width: 900px;
-    margin: 0 auto; /* Centraliza o cabeçalho */
-    
-    /* Estilos Visuais */
+/* A caixa (modal) */
+#modal-box {
+    background-color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    text-align: left;
+    z-index: 1001;
+    /* Efeito de surgimento suave */
+    animation: fadeIn 0.3s ease-out;
+}
+
+#modal-title {
+    color: #dc3545; /* Vermelho de alerta */
+    font-size: 22px;
     font-weight: 700;
-    color: #495057; 
-    background-color: #e9ecef; 
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+#modal-message {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #343a40; /* Texto escuro */
+    margin-bottom: 25px;
+}
+
+/* Botão de Fechar */
+#modal-close-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     border-radius: 4px;
-    padding: 5px 0;
-    margin-bottom: 5px; 
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    float: right; /* Alinha o botão à direita */
+    transition: background-color 0.2s;
+}
+
+#modal-close-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Animação simples de fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }

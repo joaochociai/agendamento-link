@@ -16,6 +16,8 @@
 
     <div id="sidebar-menu">
         
+        <img src="logo.png" alt="Logo da Empresa" id="sidebar-logo">
+        
         <div id="nav-menu">
             <button class="nav-tab active" onclick="showTab('tab-agendamento', this)">Agendamento de link</button>
             <button class="nav-tab" onclick="showTab('tab-calendario', this)">Calendário Interativo</button>
@@ -79,5 +81,15 @@
     </div>
     
     <script src="script.js"></script>
+
+    <div id="modal-overlay" class="modal-hidden">
+        <div id="modal-box">
+            <h2 id="modal-title">🚨 Alerta de Agendamento</h2>
+            <p id="modal-message">
+                </p>
+            <button id="modal-close-btn" onclick="closeCustomAlert()">Fechar</button>
+        </div>
+    </div>
 </body>
+
 </html>
