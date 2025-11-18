@@ -1,45 +1,14 @@
-/* --- PALETA DE CORES CLEAN --- */
+/* =========================================
+   1. CONFIGURAÇÕES GERAIS & RESET
+   ========================================= */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 0;
     margin: 0;
-    background-color: #f8f9fa; 
-    color: #343a40; 
-    display: flex; 
-    min-height: 100vh;
-}
-
-/* --- BARRA LATERAL FIXA (MENU) --- */
-#sidebar-menu {
-    width: 240px; 
-    background-color: #ffffff; 
-    color: #343a40; 
-    padding: 30px 10px; /* Ajustado para 10px nas laterais */
-    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-    border-right: 1px solid #dee2e6;
-    border-radius: 30px;
-    text-align: center;
-}
-
-#sidebar-logo {
-    width: 150px; 
-    height: auto;
+    background-color: #f8f9fa; /* Fundo levemente cinza */
+    color: #343a40; /* Texto principal escuro */
     display: block;
-    margin: 0 auto 25px auto; 
-}
-
-/* --- CONTEÚDO PRINCIPAL --- */
-#main-content {
-    margin-left: 240px; 
-    width: 100%;
-    padding: 30px 20px;
-    box-sizing: border-box; 
-    text-align: center;
+    min-height: 100vh;
 }
 
 h1 {
@@ -53,344 +22,456 @@ h1 {
     text-align: center;
 }
 
-/* --- ESTILIZAÇÃO DAS ABAS DE NAVEGAÇÃO --- */
-#nav-menu {
+/* =========================================
+   2. TELA DE LOGIN
+   ========================================= */
+#login-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     display: flex;
-    flex-direction: column;
-    padding: 0 10px;
-    margin-bottom: 30px;
-}
-
-.nav-tab {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background-color: transparent;
-    color: #495057; 
-    padding: 12px 15px;
-    margin-bottom: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-    transition: all 0.3s ease-in-out;
-    border-left: 4px solid transparent; 
-}
-
-.nav-tab.active {
-    background-color: #e9ecef; 
-    color: #007bff; 
-    font-weight: 700;
-    border-left: 4px solid #007bff;
-}
-
-.nav-tab:hover:not(.active) {
-    background-color: #f8f9fa; 
-    color: #343a40;
-}
-
-/* Regras de Esconder/Mostrar Aba */
-.tab-content {
-    min-height: 80vh;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* --- ESTILOS DO FORMULÁRIO DE AGENDAMENTO --- */
-.form-container {
-    max-width: 500px;
-    margin: 30px auto; 
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    text-align: left;
-}
-
-.professional-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; 
-}
-
-.professional-form input,
-.professional-form select,
-.professional-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 16px;
-    transition: border-color 0.2s;
-    margin-bottom: 5px;
-}
-
-.professional-form input:focus,
-.professional-form select:focus,
-.professional-form textarea:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-.professional-form label {
-    font-size: 14px;
-    color: #6c757d;
-    margin-top: 10px;
-}
-
-.professional-form button[type="submit"] {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.2s, transform 0.1s;
-    margin-top: 15px;
-}
-
-.professional-form button[type="submit"]:hover {
-    background-color: #0056b3;
-    transform: translateY(-1px);
-}
-
-#form-message {
-    font-size: 15px;
-    font-weight: 600;
-}
-
-/* Estilo para flatpickr */
-.flatpickr-input {
-    background-color: #fff !important; 
-    cursor: pointer !important;
-}
-
-/* --- ESTILOS DO CALENDÁRIO INTERATIVO --- */
-
-#calendar-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 900px;
-    margin: 20px auto 30px auto;
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #343a40;
-}
-
-#calendar-controls button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-
-/* NOVO: Estilo do Loader (Spinner) */
-.loader {
-    border: 8px solid #f3f3f3; /* Cinza claro */
-    border-top: 8px solid #007bff; /* Azul do tema */
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin: 50px auto; /* Centraliza o loader */
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Cabeçalho da Semana (Dom, Seg, ...) */
-.calendar-header-row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    max-width: 900px;
-    margin: 0 auto;
-    font-weight: 700;
-    color: #495057; 
-    background-color: #e9ecef; 
-    border-radius: 4px;
-    padding: 5px 0;
-    margin-bottom: 5px; 
-}
-
-.day-label {
-    text-align: center;
-    font-size: 0.9em;
-    padding: 5px 0;
-    display: block;
     justify-content: center;
     align-items: center;
+    z-index: 9999; /* Garante que fique sobre tudo */
 }
 
-/* Grid dos Dias */
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); 
-    gap: 5px;
-    max-width: 900px;
-    margin: 0 auto;
-    background-color: white; 
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.calendar-day {
-    border: 1px solid #ddd;
-    padding: 10px 5px;
-    border-radius: 4px;
-    min-height: 80px;
+.login-box {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
     text-align: center;
-    transition: background-color 0.2s;
 }
 
-.calendar-day:hover {
-    background-color: #f0f0f0;
-}
+.login-logo { width: 180px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
 
-.day-number {
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-bottom: 5px;
-    color: #495057;
-}
+.login-box h2 { color: #333; margin-bottom: 20px; font-size: 24px; font-weight: 700; }
 
-.appointment-names {
-    font-size: 0.85em;
-    color: #007bff; 
-    line-height: 1.2;
-    font-weight: 600;
+.login-box input {
+    width: 100%; padding: 12px; margin-bottom: 15px;
+    border: 1px solid #ced4da; border-radius: 6px;
+    box-sizing: border-box; font-size: 16px;
+    transition: border-color 0.2s;
 }
+.login-box input:focus { border-color: #007bff; outline: none; }
 
-.scheduled-day {
-    background-color: #d4edda; 
-    border-color: #28a745;
+#login-btn {
+    width: 100%; padding: 12px; background-color: #007bff;
+    color: white; border: none; border-radius: 6px;
+    font-size: 16px; font-weight: bold; cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
 }
+#login-btn:hover { background-color: #0056b3; transform: translateY(-1px); }
+#login-message { margin-top: 15px; font-size: 14px; font-weight: 500; }
 
-.empty-day {
-    background-color: #f8f9fa; 
-    border: none;
-    box-shadow: none;
-}
 
-/* Destaque do Dia Atual */
-.calendar-day.today-highlight-calendar {
-    border: 3px solid #007bff !important; 
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4); 
-    background-color: #f0f8ff; 
-}
-
-/* Banner de Alerta */
-#notification-banner {
-    position: sticky;
-    top: 20px; 
-    z-index: 90; 
-    padding: 15px 20px;
-    margin: 0 auto 20px auto; 
-    width: 80%;
-    max-width: 600px;
-    border-radius: 8px;
-    background-color: #fff3cd; 
-    color: #856404; 
-    border: 1px solid #ffeeba;
-    font-weight: 600;
-    text-align: left;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.5s ease;
-}
-
-.hidden-alert {
-    display: none;
-    opacity: 0;
-}
-
-/* Por padrão, o modal começa escondido */
-.modal-hidden {
-    display: none;
-}
-
-/* O fundo escurecido (overlay) */
-#modal-overlay {
+/* =========================================
+   3. BARRA LATERAL (SIDEBAR)
+   ========================================= */
+#sidebar-menu {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 240px;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fundo escurecido */
-    z-index: 1000;
-    display: flex; /* Usamos flex para centralizar a caixa */
-    justify-content: center;
+    background: white;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    border-radius: 15px;
+    display: block;
+    flex-direction: column; /* itens ficam empilhados */
+    align-items: center;    /* centraliza tudo horizontalmente */
+}
+
+.sidebar-top {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-/* A caixa (modal) */
-#modal-box {
+
+#sidebar-logo { width: 200px; height: auto; display: block; margin-bottom: 30px; }
+
+/* Menu de Navegação */
+#nav-menu { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-bottom: 30px; }
+
+.nav-tab {
+    display: block; width: 100%; text-align: left;
+    background-color: transparent; color: #495057;
+    padding: 12px 20px;
+    border: none; cursor: pointer; font-size: 15px; font-weight: 500;
+    border-radius: 8px; transition: all 0.2s ease-in-out;
+    border-left: 4px solid transparent;
+}
+.nav-tab.active {
+    background-color: #e9ecef; color: #007bff; font-weight: 700;
+    border-left: 4px solid #007bff;
+}
+.nav-tab:hover:not(.active) { background-color: #f8f9fa; color: #007bff; }
+
+/* Botão Sair */
+.logout-btn {
+    margin-top: auto !important; 
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80% !important;
+    padding: 12px !important;
+    color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+    border: 1px solid #ffc9c9 !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    display: flex !important; justify-content: center; align-items: center;
+}
+.logout-btn:hover {
+    background-color: #dc3545 !important; color: white !important;
+    transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    border-color: #dc3545 !important;
+}
+
+/* Controles de Data (1, 2, 3 Dias) dentro da Sidebar */
+#controls { width: 100%; padding: 0 10px; text-align: left; box-sizing: border-box; }
+#controls h2 {
+    font-size: 14px; color: #6c757d; margin-bottom: 10px;
+    text-transform: uppercase; font-weight: 600; border-bottom: 1px solid #f0f0f0;
+}
+.control-button {
+    display: block; width: 100%; padding: 10px 15px; margin: 5px 0;
+    border: none; background-color: transparent; cursor: pointer;
+    text-align: left; font-size: 15px; color: #495057;
+    transition: background-color 0.2s; border-radius: 6px;
+    border-left: 4px solid transparent;
+}
+.control-button.active {
+    background-color: #e9ecef; color: #007bff !important; font-weight: 700;
+    border-left: 4px solid #007bff !important;
+}
+.control-button:hover:not(.active) { background-color: #f0f0f0; color: #343a40; }
+
+
+/* =========================================
+   4. CONTEÚDO PRINCIPAL
+   ========================================= */
+#main-content {
+    margin-left: 240px;
+    padding: 40px;
+    width: calc(100% - 240px);
+    display: flex;
+    justify-content: center;   /* CENTRALIZA */
+}
+
+.tab-content { margin: 0 auto; width: 100%;  max-width: 900px;; display: flex; flex-direction: column; align-items: center; }
+.hidden { display: none !important; }
+
+
+/* =========================================
+   5. DATAS DE DISPARO (CARDS)
+   ========================================= */
+.date-row {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 30px; margin-bottom: 60px; max-width: 1200px; margin: 0 auto 60px auto;
+}
+
+.date-block {
+    color: #343a40;
     background-color: #ffffff;
-    padding: 25px 30px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    max-width: 500px;
-    text-align: left;
-    z-index: 1001;
-    /* Efeito de surgimento suave */
-    animation: fadeIn 0.3s ease-out;
+    padding: 15px; border-radius: 16px;
+    min-width: 180px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
+    
+    /* Flexbox para alinhar conteúdo */
+    height: 250px;
+    display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+    
+    border: 1px solid #e9ecef;
 }
+.date-block:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
 
-#modal-title {
-    color: #dc3545; /* Vermelho de alerta */
-    font-size: 22px;
+/* Bordas coloridas por setor */
+.date-block[style*="#1053A3"] { border-top: 5px solid #1e40af; }
+.date-block[style*="#6A1B9A"] { border-top: 5px solid #6d28d9; }
+
+/* Títulos e Datas */
+.step-name {
+    font-size: 17px; font-weight: 700; color: #000000;
+    margin-bottom: 10px; padding-bottom: 5px;
+    border-bottom: 1px solid #dee2e6; width: 100%;
+}
+.step-date {
+    font-size: 28px; font-weight: 800; line-height: 1.2;
+    color: #000000 !important; /* Preto Sólido */
+}
+.past-due { color: #000000 !important; } /* Mantém preto mesmo se vencido */
+
+/* Tags */
+.copy-tag {
+    display: block; font-size: 11px;
+    margin-top: 2px; margin-bottom: 2px; padding: 4px 8px;
+    border-radius: 4px; cursor: pointer; font-weight: 600;
+    transition: background-color 0.2s; white-space: normal; word-break: break-all;
+    
+    background-color: #f0f0f0; color: #000000; border: 1px solid #dee2e6;
+}
+.copy-tag:hover { background-color: #e9ecef; transform: scale(1.02); }
+
+/* Fixação no Rodapé */
+.copy-tag.primary-tag { margin-top: auto; margin-bottom: 5px; } /* Empurra para baixo */
+
+/* Tag Laranja (Infobip - Jurídica) */
+.juridica-sector .copy-tag.alternate-tag {
+    background-color: #ff9800 !important;
+    color: #000000 !important;
+    border: 1px solid #ff9800 !important;
+}
+/* Tag Laranja (Infobip - Cobrança) */
+.copy-tag.infobip-tag {
+    background-color: #ff9800;
+    color: #000000;
+    border: 1px solid #ff9800;
     font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 15px;
 }
 
-#modal-message {
-    font-size: 16px;
-    line-height: 1.5;
-    color: #343a40; /* Texto escuro */
-    margin-bottom: 25px;
+
+/* =========================================
+   6. MATRIZ HISTÓRICA
+   ========================================= */
+#matrix-container {
+    margin-top: 50px; padding: 20px;
+    background-color: #ffffff; border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    max-width: 95%; margin-left: auto; margin-right: auto;
+    overflow-x: auto; border: 1px solid #dee2e6;
 }
 
-/* Botão de Fechar */
-#modal-close-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    float: right; /* Alinha o botão à direita */
+#date-matrix table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#date-matrix th, #date-matrix td { padding: 10px; border: 1px solid #ddd; text-align: center; transition: background 0.2s; }
+#date-matrix th { background-color: #343a40; color: white; font-weight: bold; white-space: nowrap; }
+
+.today-highlight { background-color: #ff4500 !important; color: white !important; font-weight: 900; }
+.past-due-matrix { background-color: #f8d7da !important; color: #721c24; opacity: 1; }
+
+/* Hover na Célula */
+#date-matrix td.hover-active {
+    background-color: #e0f7fa; transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(0,0,0,0.15); cursor: pointer; font-weight: bold; z-index: 10;
+}
+
+
+/* =========================================
+   7. FORMULÁRIO DE AGENDAMENTO
+   ========================================= */
+.form-container {
+    width: 100%; max-width: 550px; margin: 0 auto; padding: 40px;
+    background-color: #ffffff; border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); text-align: left;
+}
+
+.professional-form { display: flex; flex-direction: column; gap: 15px; }
+
+.professional-form input, .professional-form select, .professional-form textarea {
+    width: 100%; padding: 12px;
+    border: 1px solid #ced4da; border-radius: 6px;
+    box-sizing: border-box; font-size: 15px;
+    transition: border-color 0.2s; margin-bottom: 5px; background-color: #fff;
+}
+.professional-form textarea { resize: vertical; min-height: 80px; }
+.professional-form input:focus, .professional-form select:focus, .professional-form textarea:focus {
+    border-color: #007bff; outline: none; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+.professional-form label { font-size: 14px; color: #6c757d; margin-top: 10px; font-weight: 500; }
+
+.professional-form button[type="submit"] {
+    background-color: #007bff; color: white; border: none;
+    padding: 14px 20px; border-radius: 6px; cursor: pointer;
+    font-size: 16px; font-weight: bold; margin-top: 20px;
+    transition: background-color 0.2s, transform 0.1s; width: 100%;
+}
+.professional-form button[type="submit"]:hover { background-color: #0056b3; transform: translateY(-1px); }
+#form-message { font-size: 15px; font-weight: 600; text-align: center; margin-top: 15px; }
+.flatpickr-input { background-color: #fff !important; cursor: pointer !important; }
+
+
+/* =========================================
+   8. CALENDÁRIO INTERATIVO
+   ========================================= */
+#calendar-controls {
+    display: flex; justify-content: space-between; align-items: center;
+    width: 100%; max-width: 900px; margin: 0 auto 30px auto;
+    font-size: 1.2em; font-weight: 600; color: #343a40;
+}
+#calendar-controls button {
+    background-color: #007bff; color: white; border: none;
+    padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 500;
     transition: background-color 0.2s;
 }
 
-#modal-close-btn:hover {
-    background-color: #0056b3;
+.calendar-header-row {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;
+    max-width: 900px; margin: 0 auto 5px auto;
+    font-weight: 700; color: #495057; background-color: #e9ecef;
+    border-radius: 4px; padding: 10px 0;
+}
+.day-label { text-align: center; font-size: 0.9em; padding: 0; }
+
+.calendar-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;
+    max-width: 900px; margin: 0 auto; background-color: white;
+    border-radius: 8px; padding: 10px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.calendar-day {
+    border: 1px solid #ddd; padding: 10px 5px; border-radius: 4px;
+    min-height: 80px; text-align: center; transition: background-color 0.2s;
+}
+.calendar-day:hover { background-color: #f0f0f0; }
+.day-number { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; color: #495057; }
+.appointment-names { font-size: 0.85em; color: #007bff; line-height: 1.2; font-weight: 600; }
+.scheduled-day { background-color: #d4edda; border-color: #28a745; }
+.empty-day { background-color: #f8f9fa; border: none; box-shadow: none; }
+.calendar-day.today-highlight-calendar { border: 3px solid #007bff !important; background-color: #f0f8ff; }
+
+.loader {
+    border: 6px solid #f3f3f3; border-top: 6px solid #007bff;
+    border-radius: 50%; width: 50px; height: 50px;
+    animation: spin 1s linear infinite; margin: 50px auto;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+/* =========================================
+   9. MODAL E ALERTA
+   ========================================= */
+.modal-hidden { display: none; }
+#modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); z-index: 2000; backdrop-filter: blur(3px);
+    display: flex; justify-content: center; align-items: center;
+}
+#modal-box {
+    background-color: #ffffff; padding: 30px; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); width: 90%; max-width: 450px;
+    text-align: left; animation: fadeIn 0.3s ease-out;
+}
+#modal-title { color: #dc3545; font-size: 20px; font-weight: 700; margin-top: 0; margin-bottom: 15px; }
+#modal-message { font-size: 16px; line-height: 1.6; color: #343a40; margin-bottom: 25px; }
+#modal-close-btn {
+    background-color: #6c757d; color: white; border: none; padding: 10px 20px;
+    border-radius: 6px; cursor: pointer; font-weight: 600; float: right;
+}
+#modal-close-btn:hover { background-color: #5a6268; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+/* Banner de Alerta (Aviso Inicial) */
+#notification-banner {
+    position: sticky; top: 20px; z-index: 90; padding: 15px 20px;
+    margin: 0 auto 20px auto; width: 80%; max-width: 600px;
+    border-radius: 8px; background-color: #fff3cd; color: #856404;
+    border: 1px solid #ffeeba; font-weight: 600; text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.5s ease;
+}
+.hidden-alert { display: none; opacity: 0; }
+
+/* --- ESTILO DOS NOMES NO CALENDÁRIO (BOTOES) --- */
+.appointment-names {
+    display: flex;
+    flex-direction: column;
+    gap: 3px; /* Espaço entre os botões se houver mais de um */
+    margin-top: 5px;
 }
 
-/* Animação simples de fade-in */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+/* Transforma o link de texto em um botão estilo 'tag' */
+.app-link {
+    display: block;
+    background-color: #e7f1ff; /* Fundo azul bem claro */
+    color: #007bff; /* Texto azul */
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #cce5ff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona ... se o nome for muito longo */
+}
+
+.app-link:hover {
+    background-color: #007bff; /* Fundo azul sólido no hover */
+    color: #ffffff; /* Texto branco */
+    border-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+/* --- ESTILOS DO MODAL DE DETALHES (Confirmação) --- */
+#details-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); z-index: 2000;
+    display: none; justify-content: center; align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+#details-modal-box {
+    background-color: #ffffff; padding: 0; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); width: 95%; max-width: 600px;
+    z-index: 2001; animation: fadeIn 0.3s ease-out; overflow: hidden;
+}
+
+#details-modal-title {
+    background-color: #f8f9fa; color: #343a40; font-size: 20px;
+    margin: 0; padding: 20px; border-bottom: 1px solid #dee2e6;
+    text-align: left; font-weight: 700;
+}
+
+.details-content-wrapper {
+    padding: 20px;
+}
+
+/* Tabela de Detalhes */
+.details-table { width: 100%; border-collapse: collapse; }
+.details-table tr { border-bottom: 1px solid #f0f0f0; }
+.details-table tr:last-child { border-bottom: none; }
+.details-table th { text-align: left; padding: 12px 5px; color: #6c757d; font-weight: 600; width: 35%; }
+.details-table td { text-align: right; padding: 12px 5px; color: #343a40; font-weight: 600; }
+
+/* Botão Fechar Modal */
+#details-modal-close-btn {
+    width: 100%; border: none; background-color: #f8f9fa;
+    color: #6c757d; font-weight: 600; padding: 15px;
+    cursor: pointer; border-top: 1px solid #dee2e6;
+    transition: background 0.2s; font-size: 16px;
+}
+#details-modal-close-btn:hover { background-color: #e2e6ea; color: #343a40; }
+
+#copy-details-btn {
+    padding: 8px 14px;
+    background-color: #007bff;
+    border: 10px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+#copy-details-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#details-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-right: 15px;
 }

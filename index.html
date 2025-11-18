@@ -3,93 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamento de Links</title>
+    <title>Sistema MedCof - Agendamento</title>
 
-        <link rel="icon" type="image/png" href="icon.png">
-
+    <link rel="icon" type="image/png" href="icon.png">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script> <link rel="stylesheet" href="style.css">
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="sidebar-menu">
-        
-        <img src="logo.png" alt="Logo da Empresa" id="sidebar-logo">
-        
-        <div id="nav-menu">
-            <button class="nav-tab active" onclick="showTab('tab-agendamento', this)">Agendamento de link</button>
-            <button class="nav-tab" onclick="showTab('tab-calendario', this)">Calendário Interativo</button>
+    <div id="login-screen">
+        <div class="login-box">
+            <img src="logo.png" alt="MedCof Logo" class="login-logo">
+            <h2>Acesso Restrito</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="E-mail corporativo" required>
+                <input type="password" id="login-password" placeholder="Senha" required>
+                <button type="submit" id="login-btn">ENTRAR NO SISTEMA</button>
+            </form>
+            <p id="login-message"></p>
         </div>
     </div>
-    
-    <div id="main-content">
 
-        <div id="tab-agendamento" class="tab-content active">
-            <h1>AGENDAMENTO DE LINK</h1>
-            <div class="form-container">
-                <form id="link-schedule-form" class="professional-form">
-                    
-                    <input name="Nome" type="text" placeholder="Nome Completo do Aluno" required>
-                    
-                    <input name="Email" type="email" placeholder="E-mail do Aluno" required>
-                    
-                    <input name="Curso" type="text" placeholder="Nome do Curso" required>
-                    
-                    <input name="Telefone" type="tel" placeholder="Telefone com DDD" required>
-                    
-                    <label for="motivo-link">Motivo do Link:</label>
-                    <select name="Motivo" id="motivo-link" required>
-                        <option value="" disabled selected>Selecione o motivo</option>
-                        <option value="Renegociacao Shuri">Renegociação Shuri</option>
-                        <option value="Valor Diluido">Valor diluído</option>
-                        <option value="Link Pagamento GURU">Link de pagamento GURU</option>
-                        <option value="Cancelamento">Cancelamento</option>
-                    </select>
-                    
-                    <input name="QtdParcelas" type="number" placeholder="Quantidade de Parcelas" min="1" required>
-                    
-                    <input name="ValorParcela" type="text" placeholder="Valor da Parcela (Ex: 500,00)" required>
-                    
-                    <label for="vencimento">Data de Vencimento:</label>
-                    <input name="DataVencimento" id="datepicker-vencimento" type="text" placeholder="Selecione a data de vencimento" required>
-                    
-                    <label for="gerar-link">Data para Gerar Link:</label>
-                    <input name="DataGerarLink" id="datepicker-gerar" type="text" placeholder="Selecione a data para gerar o link" required>
-                    
-                    <label for="observacao">Observação:</label>
-                    <textarea name="Observacao" id="observacao" placeholder="Opcional: Detalhes específicos sobre o acordo ou negociação." rows="3"></textarea>
+    <div id="app-content" style="display: none;">
+        
+        <div id="sidebar-menu">
+            <img src="logo.png" alt="Logo da Empresa" id="sidebar-logo">
+            
+            <div id="nav-menu">
+                <button class="nav-tab active" onclick="window.showTab('tab-agendamento', this)">Agendamento de link</button>
+                <button class="nav-tab" onclick="window.showTab('tab-calendario', this)">Calendário</button>
+                <button class="nav-tab logout-btn" onclick="window.logoutSystem()">🔒 Sair</button>
+            </div>
+        </div>
+        
+        <div id="main-content">
+            
+            <div id="tab-agendamento" class="tab-content active">
+                <h1>AGENDAMENTO DE LINK</h1>
+                <div class="form-container">
+                    <form id="link-schedule-form" class="professional-form">
+                        <input name="Nome" type="text" placeholder="Nome Completo do Aluno" required>
+                        <input name="Email" type="email" placeholder="E-mail do Aluno" required>
+                        <input name="Curso" type="text" placeholder="Nome do Curso" required>
+                        <input name="Telefone" type="tel" placeholder="Telefone com DDD" required>
                         
-                    <button type="submit">AGENDAR</button>
-                    <p id="form-message"></p>
-                </form>
-            </div>
-        </div>
-
-        <div id="tab-calendario" class="tab-content hidden">
-            <h1>CALENDÁRIO INTERATIVO</h1>
-
-            <div id="calendar-controls">
-                <button id="prevMonthBtn" onclick="changeMonth(-1)">&lt; Anterior</button>
-                <span id="currentMonthDisplay"></span> <button id="nextMonthBtn" onclick="changeMonth(1)">Próximo &gt;</button>
-            </div>
-
-            <div id="calendar-view">
+                        <label>Motivo do Link:</label>
+                        <select name="Motivo" required>
+                            <option value="" disabled selected>Selecione o motivo</option>
+                            <option value="Renegociacao Shuri">Renegociação Shuri</option>
+                            <option value="Valor Diluido">Valor diluído</option>
+                            <option value="Link Pagamento GURU">Link de pagamento GURU</option>
+                            <option value="Cancelamento">Cancelamento</option>
+                        </select>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <input name="QtdParcelas" type="number" placeholder="Qtd. Parcelas" min="1" required>
+                            <input name="ValorParcela" type="text" placeholder="Valor Parcela (R$)" required>
+                        </div>
+                        
+                        <label>Data de Vencimento:</label>
+                        <input name="DataVencimento" id="datepicker-vencimento" type="text" placeholder="Selecione a data" required>
+                        
+                        <label>Data para Gerar Link:</label>
+                        <input name="DataGerarLink" id="datepicker-gerar" type="text" placeholder="Selecione a data" required>
+                        
+                        <label>Observação:</label>
+                        <textarea name="Observacao" placeholder="Detalhes adicionais..." rows="3"></textarea>
+                            
+                        <button type="submit">SALVAR AGENDAMENTO</button>
+                        <p id="form-message"></p>
+                    </form>
                 </div>
+            </div>
+
+            <div id="tab-calendario" class="tab-content hidden">
+                <h1>AGENDAMENTOS DO MÊS</h1>
+                <div id="calendar-controls">
+                    <button onclick="window.changeMonth(-1)">&lt; Anterior</button>
+                    <span id="currentMonthDisplay"></span> 
+                    <button onclick="window.changeMonth(1)">Próximo &gt;</button>
+                </div>
+                <div id="calendar-view"></div>
+            </div>
+
         </div>
     </div>
-    
-    <script src="script.js"></script>
 
     <div id="modal-overlay" class="modal-hidden">
         <div id="modal-box">
-            <h2 id="modal-title">🚨 Alerta de Agendamento</h2>
-            <p id="modal-message">
-                </p>
-            <button id="modal-close-btn" onclick="closeCustomAlert()">Fechar</button>
+            <h2 id="modal-title">Aviso</h2>
+            <p id="modal-message"></p>
+            <button id="modal-close-btn" onclick="window.closeCustomAlert()">Fechar</button>
         </div>
     </div>
-</body>
 
+    <div id="details-modal-overlay" class="modal-hidden">
+        <div id="details-modal-box">
+            <div id="details-modal-header">
+                <h2 id="details-modal-title">Detalhes do Agendamento</h2>
+                <button id="copy-details-btn" onclick="window.copyAppointmentFormatted()">Copiar</button>
+            </div>
+            <div id="details-modal-content">
+                </div>
+            <button id="details-modal-close-btn" onclick="window.closeDetailsModal()">Fechar</button>
+        </div>
+    </div>
+    
+    <script type="module" src="script.js"></script>
+</body>
 </html>
