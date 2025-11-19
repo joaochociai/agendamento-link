@@ -82,31 +82,55 @@ window.logoutSystem = function() {
 
 // Envio do Formulário
 const agendamentoForm = document.getElementById('link-schedule-form');
-agendamentoForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const message = document.getElementById('form-message');
-    const formData = new FormData(agendamentoForm);
-    
-    const dataToSave = {};
-    formData.forEach((value, key) => dataToSave[key] = value);
-    
-    dataToSave.createdAt = new Date();
-    dataToSave.createdBy = auth.currentUser.email;
+if (agendamentoForm) {
+    agendamentoForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = document.getElementById('form-message');
+        const formData = new FormData(agendamentoForm);
+        
+        const dataToSave = {};
+        formData.forEach((value, key) => dataToSave[key] = value.trim());
+        
+        // CORREÇÃO 1: Converter Valor e Parcelas para números
+        if (dataToSave.ValorParcela) {
+            // Remove R$, pontos e troca vírgula por ponto
+            const limpo = dataToSave.ValorParcela.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+            dataToSave.ValorParcela = parseFloat(limpo);
+        }
+        if (dataToSave.QtdParcelas) {
+            dataToSave.QtdParcelas = parseInt(dataToSave.QtdParcelas);
+        }
 
-    message.textContent = 'Salvando...';
-    message.style.color = '#007bff';
+        // CORREÇÃO 2: Converter as Datas de texto para Objeto Date
+        const dataVenc = parseDateBR(dataToSave.DataVencimento);
+        const dataGerar = parseDateBR(dataToSave.DataGerarLink);
 
-    try {
-        await addDoc(collection(db, "agendamentos"), dataToSave);
-        message.textContent = 'Agendamento salvo com sucesso!';
-        message.style.color = '#28a745';
-        agendamentoForm.reset();
-    } catch (error) {
-        console.error("Erro ao salvar: ", error);
-        message.textContent = 'Erro ao salvar. Tente novamente.';
-        message.style.color = '#dc3545';
-    }
-});
+        if (dataVenc) dataToSave.DataVencimento = dataVenc;
+        if (dataGerar) dataToSave.DataGerarLink = dataGerar;
+
+        // Metadados
+        dataToSave.createdAt = new Date();
+        dataToSave.createdBy = auth.currentUser ? auth.currentUser.email : 'Sistema';
+
+        message.textContent = 'Salvando...';
+        message.style.color = '#007bff';
+
+        try {
+            await addDoc(collection(db, "agendamentos"), dataToSave);
+            message.textContent = 'Agendamento salvo com sucesso!';
+            message.style.color = '#28a745';
+            agendamentoForm.reset();
+            
+            // Atualiza os dados locais se a função existir
+            if (typeof loadCalendarData === 'function') loadCalendarData();
+            
+        } catch (error) {
+            console.error("Erro ao salvar: ", error);
+            message.textContent = 'Erro ao salvar. Tente novamente.';
+            message.style.color = '#dc3545';
+        }
+    });
+}
 
 // Leitura do Calendário
 async function loadCalendarData() {
@@ -177,35 +201,46 @@ window.renderCalendar = function(agendamentos) {
     const titleDisplay = document.getElementById('currentMonthDisplay');
     if(titleDisplay) titleDisplay.textContent = `${renderMonthName} ${renderYear}`;
     
-    // 1. Mapeamento de dados
+    // 1. Mapeamento de dados (CORRIGIDO PARA LER TIMESTAMP E TEXTO)
     const appointmentsByDate = agendamentos.reduce((acc, item) => {
-        let dateString = item.DataGerarLink;
-        if (typeof dateString === 'string' && dateString.includes('/')) {
-            const parts = dateString.split('/');
-            dateString = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        let dateObject;
+
+        // CENÁRIO 1: É um Timestamp do Firebase (Novos Agendamentos)
+        if (item.DataGerarLink && typeof item.DataGerarLink.toDate === 'function') {
+            dateObject = item.DataGerarLink.toDate();
+        } 
+        // CENÁRIO 2: É texto ou Date string (Importados)
+        else if (item.DataGerarLink) {
+            const dateString = String(item.DataGerarLink);
+            if (dateString.includes('/')) {
+                const parts = dateString.split('/');
+                dateObject = new Date(parts[2], parts[1] - 1, parts[0]);
+            } else {
+                dateObject = new Date(dateString);
+            }
         }
-        
-        const dateObject = new Date(dateString); 
-        const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
-        const adjustedDate = new Date(dateObject.getTime() + userTimezoneOffset);
 
-        const dateKey = formatDate(adjustedDate);
-        
-        // Garante que tenhamos um nome para exibir
-        const fullName = item.Nome || 'Aluno';
-        const firstName = fullName.split(' ')[0];
+        // Se a data for válida, processa
+        if (dateObject && !isNaN(dateObject)) {
+            // Ajuste de fuso horário para exibição correta no dia
+            const dateKey = formatDate(dateObject); 
+            const fullName = item.Nome || 'Aluno';
+            const firstName = fullName.split(' ')[0];
 
-        if (adjustedDate.getFullYear() === renderYear && adjustedDate.getMonth() === renderMonthIndex) {
-            if (!acc[dateKey]) acc[dateKey] = [];
-            // SALVA O ID E O NOME PARA O BOTÃO
-            acc[dateKey].push({ name: firstName, id: item.id }); 
+            // Verifica Ano e Mês (usando métodos locais para casar com a visualização)
+            if (dateObject.getFullYear() === renderYear && dateObject.getMonth() === renderMonthIndex) {
+                if (!acc[dateKey]) acc[dateKey] = [];
+                acc[dateKey].push({ name: firstName, id: item.id }); 
+            }
         }
         return acc;
     }, {});
     
-    // ... (Lógica do Alerta mantida igual) ...
+    // ... (O RESTANTE DA FUNÇÃO - Lógica do Alerta e Grid HTML - PERMANECE IGUAL) ...
+    // Copie a parte do "Alerta de Hoje" e da "Construção do Grid" do seu código anterior
+    // ou mantenha o que já está lá embaixo.
     
-    // 3. Constrói o Calendário
+    // (Para facilitar, segue o bloco final do Grid para garantir que não falte nada)
     const daysInMonth = new Date(renderYear, renderMonthIndex + 1, 0).getDate();
     const firstDayOfMonth = new Date(renderYear, renderMonthIndex, 1).getDay(); 
     
@@ -222,12 +257,8 @@ window.renderCalendar = function(agendamentos) {
         const dateKey = `${dayString}/${monthString}/${renderYear}`; 
         
         const namesArray = appointmentsByDate[dateKey];
-        
-        // GERAÇÃO DOS BOTÕES INTERATIVOS COM O ID CORRETO
         const namesHtml = namesArray ? namesArray.map(app => 
-            `<span class="app-link" onclick="window.showAppointmentDetails('${app.id}')" title="Ver detalhes de ${app.name}">
-                ${app.name}
-             </span>`
+            `<span class="app-link" onclick="window.showAppointmentDetails('${app.id}')" title="Ver detalhes de ${app.name}">${app.name}</span>`
         ).join('') : '';
         
         const isScheduled = namesArray && namesArray.length > 0 ? 'scheduled-day' : '';
@@ -264,6 +295,17 @@ function formatDate(date) {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+}
+
+// FUNÇÃO NOVA: Converte texto "DD/MM/AAAA" para Data Real
+function parseDateBR(dateString) {
+    if (!dateString) return null;
+    const parts = dateString.split('/');
+    if (parts.length === 3) {
+        // Cria a data: Ano, Mês (0-11), Dia
+        return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+    return null; 
 }
 
 function getTodayDateKey() { return formatDate(new Date()); }
@@ -388,10 +430,27 @@ Assunto: Link agendado com vencimento para ${dataVencimento}, previsto ${app.Qtd
 };
 
 // Helper para formatar UTC (necessário, pois as datas no Firebase são UTC)
-function formatDateUTC(date) {
-    const day = String(date.getUTCDate()).padStart(2, '0');
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const year = date.getUTCFullYear();
+function formatDateUTC(dateInput) {
+    if (!dateInput) return '-';
+    
+    let d;
+    
+    // CENÁRIO 1: É um Timestamp do Firebase (tem a função .toDate)
+    if (dateInput && typeof dateInput.toDate === 'function') {
+        d = dateInput.toDate();
+    } 
+    // CENÁRIO 2: É uma String ou Objeto Date padrão
+    else {
+        d = new Date(dateInput);
+    }
+
+    // Verifica se a data é válida (evita NaN)
+    if (isNaN(d.getTime())) return 'Data Inválida';
+
+    // Formata (Usa UTC para evitar que o dia volte devido ao fuso horário)
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const year = d.getUTCFullYear();
     return `${day}/${month}/${year}`;
 }
 
@@ -406,18 +465,15 @@ window.renderListTable = function(data) {
     }
     document.getElementById('no-results-message').style.display = 'none';
 
-    // Ordena por data de gerar link (mais recente primeiro)
-    // Clona o array para não afetar a ordem original global
-    const sortedData = data;
-    
-
-    sortedData.forEach(app => {
+    data.forEach(app => {
         const tr = document.createElement('tr');
         
-        // Formatações seguras
+        // Formatação de Valor
         const valor = app.ValorParcela ? parseFloat(app.ValorParcela).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
-        const dataGerar = app.DataGerarLink ? formatDateUTC(new Date(app.DataGerarLink)) : '-';
-        const dataVenc = app.DataVencimento ? formatDateUTC(new Date(app.DataVencimento)) : '-';
+        
+        // Formatação de Datas (Usa a função inteligente formatDateUTC)
+        const dataGerar = formatDateUTC(app.DataGerarLink);
+        const dataVenc = formatDateUTC(app.DataVencimento);
 
         tr.innerHTML = `
             <td><strong>${dataGerar}</strong></td>
@@ -441,7 +497,7 @@ window.filterList = function() {
 
     let filteredData = window.allAppointments || [];
 
-    // 1. Filtros (Texto e Data) - Mantido igual
+    // 1. Filtros de Texto
     if (searchTerm) {
         filteredData = filteredData.filter(app => 
             (app.Nome && app.Nome.toLowerCase().includes(searchTerm)) ||
@@ -450,69 +506,88 @@ window.filterList = function() {
         );
     }
 
+    // 2. Filtros de Data (Normalizado)
     if (startDateStr && endDateStr) {
         const parseBrDate = (str) => {
             const [d, m, y] = str.split('/');
-            return new Date(y, m - 1, d);
+            return new Date(y, m - 1, d).getTime();
         };
         const start = parseBrDate(startDateStr);
-        const end = parseBrDate(endDateStr);
-        end.setHours(23, 59, 59);
+        const end = parseBrDate(endDateStr) + 86399999; // Final do dia
 
         filteredData = filteredData.filter(app => {
             if (!app.DataGerarLink) return false;
-            const appDate = new Date(app.DataGerarLink);
-            return appDate >= start && appDate <= end;
+            // Converte para milissegundos para comparar
+            let appTime = 0;
+            if (app.DataGerarLink.toDate) appTime = app.DataGerarLink.toDate().getTime();
+            else if (typeof app.DataGerarLink === 'string') {
+                const d = app.DataGerarLink.includes('/') ? parseDateBR(app.DataGerarLink) : new Date(app.DataGerarLink);
+                appTime = d ? d.getTime() : 0;
+            }
+            return appTime >= start && appTime <= end;
         });
     }
 
-    // 2. LÓGICA DE ORDENAÇÃO (NOVO)
+    // 3. ORDENAÇÃO (AQUI ESTÁ A MÁGICA DAS SETINHAS)
     filteredData.sort((a, b) => {
-        let valA = a[currentSort.column];
-        let valB = b[currentSort.column];
+        // Helper para extrair valor comparável (numérico ou texto minúsculo)
+        const getValue = (item, col) => {
+            let val = item[col];
+            if (!val) return 0;
 
-        // Tratamento para Datas
-        if (currentSort.column === 'DataGerarLink' || currentSort.column === 'DataVencimento') {
-            valA = valA ? new Date(valA).getTime() : 0;
-            valB = valB ? new Date(valB).getTime() : 0;
-        }
-        // Tratamento para Números (Valor)
-        else if (currentSort.column === 'ValorParcela') {
-            valA = valA || 0;
-            valB = valB || 0;
-        }
-        // Tratamento para Texto (Nome, Curso)
-        else {
-            valA = (valA || '').toString().toLowerCase();
-            valB = (valB || '').toString().toLowerCase();
-        }
+            // Datas (Retorna milissegundos)
+            if (col === 'DataGerarLink' || col === 'DataVencimento') {
+                if (val.toDate) return val.toDate().getTime();
+                if (typeof val === 'string' && val.includes('/')) return parseDateBR(val).getTime();
+                return new Date(val).getTime();
+            }
+            
+            // Valor (Retorna número float)
+            if (col === 'ValorParcela') {
+                return typeof val === 'number' ? val : parseFloat(val);
+            }
+
+            // Texto (Retorna string minúscula)
+            return val.toString().toLowerCase();
+        };
+
+        let valA = getValue(a, currentSort.column);
+        let valB = getValue(b, currentSort.column);
 
         if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
         if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
         return 0;
     });
 
-    // Renderiza
     window.renderListTable(filteredData);
 }
 
 // Limpa filtros
 window.clearFilters = function() {
     document.getElementById('list-search').value = '';
-    // Limpa os inputs do Flatpickr
-    if (document.getElementById('filter-start-date')._flatpickr) 
-        document.getElementById('filter-start-date')._flatpickr.clear();
-    
-    if (document.getElementById('filter-end-date')._flatpickr) 
-        document.getElementById('filter-end-date')._flatpickr.clear();
-    
+    const startPicker = document.getElementById('filter-start-date')._flatpickr;
+    const endPicker = document.getElementById('filter-end-date')._flatpickr;
+    if(startPicker) startPicker.clear();
+    if(endPicker) endPicker.clear();
     window.filterList();
 }
 
 let currentSort = {
     column: 'DataGerarLink', // Coluna padrão
-    direction: 'desc'        // Ordem padrão (mais recente primeiro)
+    direction: 'desc'        // Ordem padrão
 };
+
+// Função de Ordenação (Chamada ao clicar no cabeçalho)
+window.sortTable = function(column) {
+    if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort.column = column;
+        currentSort.direction = 'asc';
+    }
+    updateSortIcons();
+    window.filterList(); // Re-aplica filtros e ordenação
+}
 
 // --- FUNÇÃO DE ORDENAÇÃO (CHAMADA PELO CLIQUE NO CABEÇALHO) ---
 window.sortTable = function(column) {
