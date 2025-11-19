@@ -34,8 +34,9 @@
             <img src="logo.png" alt="Logo da Empresa" id="sidebar-logo">
             
             <div id="nav-menu">
-                <button class="nav-tab active" onclick="window.showTab('tab-agendamento', this)">Agendamento de link</button>
+                <button class="nav-tab active" onclick="window.showTab('tab-agendamento', this)">Novo agendamento</button>
                 <button class="nav-tab" onclick="window.showTab('tab-calendario', this)">Calendário</button>
+                <button class="nav-tab" onclick="window.showTab('tab-lista', this)">Histórico</button>
                 <button class="nav-tab logout-btn" onclick="window.logoutSystem()">🔒 Sair</button>
             </div>
         </div>
@@ -88,6 +89,39 @@
                     <button onclick="window.changeMonth(1)">Próximo &gt;</button>
                 </div>
                 <div id="calendar-view"></div>
+            </div>
+
+            <div id="tab-lista" class="tab-content hidden">
+                <h1>LISTA DE AGENDAMENTOS</h1>
+                
+                <div class="filters-container">
+                    <div class="search-box">
+                        <input type="text" id="list-search" placeholder="🔍 Buscar por Nome, E-mail ou Curso..." onkeyup="window.filterList()">
+                    </div>
+                    <div class="date-filters">
+                        <input type="text" id="filter-start-date" placeholder="Data Inicial">
+                        <input type="text" id="filter-end-date" placeholder="Data Final">
+                    </div>
+                    <button class="clean-filter-btn" onclick="window.clearFilters()">Limpar Filtros</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Data Link</th>
+                                <th>Aluno</th>
+                                <th>Curso</th>
+                                <th>Valor</th>
+                                <th>Vencimento</th>
+                                <th style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            </tbody>
+                    </table>
+                    <p id="no-results-message" style="display: none; text-align: center; margin-top: 20px; color: #666;">Nenhum agendamento encontrado para os filtros selecionados.</p>
+                </div>
             </div>
 
         </div>

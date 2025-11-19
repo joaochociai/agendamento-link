@@ -148,6 +148,15 @@ window.showTab = function(tabId, clickedButton) {
     if (tabId === 'tab-calendario') {
         window.changeMonth(0);
     }
+
+    if (tabId === 'tab-lista') {
+        // Se a lista estiver vazia, tenta carregar (caso o usuário tenha ido direto pra essa aba)
+        if (!window.allAppointments || window.allAppointments.length === 0) {
+             loadCalendarData().then(() => window.filterList());
+        } else {
+             window.filterList(); // Apenas renderiza
+        }
+    }
 }
 
 window.changeMonth = function(offset) {
@@ -263,6 +272,20 @@ function getTodayDateKey() { return formatDate(new Date()); }
 document.addEventListener('DOMContentLoaded', () => {
     flatpickr("#datepicker-vencimento", { dateFormat: "d/m/Y", locale: "pt", allowInput: true });
     flatpickr("#datepicker-gerar", { dateFormat: "d/m/Y", locale: "pt", minDate: "today", allowInput: true });
+    // Inicializa Flatpickr para os filtros da lista
+    flatpickr("#filter-start-date", { 
+        dateFormat: "d/m/Y", 
+        locale: "pt", 
+        allowInput: true,
+        onChange: function() { window.filterList(); } 
+    });
+    flatpickr("#filter-end-date", { 
+        dateFormat: "d/m/Y", 
+        locale: "pt", 
+        allowInput: true,
+        onChange: function() { window.filterList(); } 
+    });
+
 });
 
 window.showAppointmentDetails = function(appointmentId) {
@@ -370,4 +393,101 @@ function formatDateUTC(date) {
     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
     const year = date.getUTCFullYear();
     return `${day}/${month}/${year}`;
+}
+
+// Renderiza a tabela com os dados passados
+window.renderListTable = function(data) {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = '';
+
+    if (!data || data.length === 0) {
+        document.getElementById('no-results-message').style.display = 'block';
+        return;
+    }
+    document.getElementById('no-results-message').style.display = 'none';
+
+    // Ordena por data de gerar link (mais recente primeiro)
+    // Clona o array para não afetar a ordem original global
+    const sortedData = [...data].sort((a, b) => {
+        const dateA = a.DataGerarLink ? new Date(a.DataGerarLink) : new Date(0);
+        const dateB = b.DataGerarLink ? new Date(b.DataGerarLink) : new Date(0);
+        return dateB - dateA;
+    });
+
+    sortedData.forEach(app => {
+        const tr = document.createElement('tr');
+        
+        // Formatações seguras
+        const valor = app.ValorParcela ? parseFloat(app.ValorParcela).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
+        const dataGerar = app.DataGerarLink ? formatDateUTC(new Date(app.DataGerarLink)) : '-';
+        const dataVenc = app.DataVencimento ? formatDateUTC(new Date(app.DataVencimento)) : '-';
+
+        tr.innerHTML = `
+            <td><strong>${dataGerar}</strong></td>
+            <td>${app.Nome || '-'}</td>
+            <td>${app.Curso || '-'}</td>
+            <td>${valor} <small>(${app.QtdParcelas || 1}x)</small></td>
+            <td>${dataVenc}</td>
+            <td style="text-align: center;">
+                <button class="action-btn" onclick="window.showAppointmentDetails('${app.id}')">Ver Detalhes</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Função de Filtragem (Chamada ao digitar ou mudar datas)
+window.filterList = function() {
+    const searchTerm = document.getElementById('list-search').value.toLowerCase();
+    const startDateStr = document.getElementById('filter-start-date').value; 
+    const endDateStr = document.getElementById('filter-end-date').value; 
+
+    // Começa com todos os agendamentos carregados
+    let filteredData = window.allAppointments || [];
+
+    // 1. Filtro de Texto (Nome, Email, Curso)
+    if (searchTerm) {
+        filteredData = filteredData.filter(app => 
+            (app.Nome && app.Nome.toLowerCase().includes(searchTerm)) ||
+            (app.Email && app.Email.toLowerCase().includes(searchTerm)) ||
+            (app.Curso && app.Curso.toLowerCase().includes(searchTerm))
+        );
+    }
+
+    // 2. Filtro de Data (Baseado na Data para Gerar Link)
+    if (startDateStr && endDateStr) {
+        // Converte string dd/mm/yyyy para Date
+        const parseBrDate = (str) => {
+            const [d, m, y] = str.split('/');
+            return new Date(y, m - 1, d);
+        };
+
+        const start = parseBrDate(startDateStr);
+        const end = parseBrDate(endDateStr);
+        end.setHours(23, 59, 59); // Inclui o final do dia
+
+        filteredData = filteredData.filter(app => {
+            if (!app.DataGerarLink) return false;
+            // Ajuste de fuso simples para comparação
+            const appDate = new Date(app.DataGerarLink);
+            // Adiciona 3 horas para compensar possível UTC se necessário, ou usa UTC methods
+            // Aqui comparamos objetos Date diretamente
+            return appDate >= start && appDate <= end;
+        });
+    }
+
+    window.renderListTable(filteredData);
+}
+
+// Limpa filtros
+window.clearFilters = function() {
+    document.getElementById('list-search').value = '';
+    // Limpa os inputs do Flatpickr
+    if (document.getElementById('filter-start-date')._flatpickr) 
+        document.getElementById('filter-start-date')._flatpickr.clear();
+    
+    if (document.getElementById('filter-end-date')._flatpickr) 
+        document.getElementById('filter-end-date')._flatpickr.clear();
+    
+    window.filterList();
 }
