@@ -408,11 +408,8 @@ window.renderListTable = function(data) {
 
     // Ordena por data de gerar link (mais recente primeiro)
     // Clona o array para não afetar a ordem original global
-    const sortedData = [...data].sort((a, b) => {
-        const dateA = a.DataGerarLink ? new Date(a.DataGerarLink) : new Date(0);
-        const dateB = b.DataGerarLink ? new Date(b.DataGerarLink) : new Date(0);
-        return dateB - dateA;
-    });
+    const sortedData = data;
+    
 
     sortedData.forEach(app => {
         const tr = document.createElement('tr');
@@ -442,10 +439,9 @@ window.filterList = function() {
     const startDateStr = document.getElementById('filter-start-date').value; 
     const endDateStr = document.getElementById('filter-end-date').value; 
 
-    // Começa com todos os agendamentos carregados
     let filteredData = window.allAppointments || [];
 
-    // 1. Filtro de Texto (Nome, Email, Curso)
+    // 1. Filtros (Texto e Data) - Mantido igual
     if (searchTerm) {
         filteredData = filteredData.filter(app => 
             (app.Nome && app.Nome.toLowerCase().includes(searchTerm)) ||
@@ -454,28 +450,49 @@ window.filterList = function() {
         );
     }
 
-    // 2. Filtro de Data (Baseado na Data para Gerar Link)
     if (startDateStr && endDateStr) {
-        // Converte string dd/mm/yyyy para Date
         const parseBrDate = (str) => {
             const [d, m, y] = str.split('/');
             return new Date(y, m - 1, d);
         };
-
         const start = parseBrDate(startDateStr);
         const end = parseBrDate(endDateStr);
-        end.setHours(23, 59, 59); // Inclui o final do dia
+        end.setHours(23, 59, 59);
 
         filteredData = filteredData.filter(app => {
             if (!app.DataGerarLink) return false;
-            // Ajuste de fuso simples para comparação
             const appDate = new Date(app.DataGerarLink);
-            // Adiciona 3 horas para compensar possível UTC se necessário, ou usa UTC methods
-            // Aqui comparamos objetos Date diretamente
             return appDate >= start && appDate <= end;
         });
     }
 
+    // 2. LÓGICA DE ORDENAÇÃO (NOVO)
+    filteredData.sort((a, b) => {
+        let valA = a[currentSort.column];
+        let valB = b[currentSort.column];
+
+        // Tratamento para Datas
+        if (currentSort.column === 'DataGerarLink' || currentSort.column === 'DataVencimento') {
+            valA = valA ? new Date(valA).getTime() : 0;
+            valB = valB ? new Date(valB).getTime() : 0;
+        }
+        // Tratamento para Números (Valor)
+        else if (currentSort.column === 'ValorParcela') {
+            valA = valA || 0;
+            valB = valB || 0;
+        }
+        // Tratamento para Texto (Nome, Curso)
+        else {
+            valA = (valA || '').toString().toLowerCase();
+            valB = (valB || '').toString().toLowerCase();
+        }
+
+        if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+        if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    // Renderiza
     window.renderListTable(filteredData);
 }
 
@@ -490,4 +507,39 @@ window.clearFilters = function() {
         document.getElementById('filter-end-date')._flatpickr.clear();
     
     window.filterList();
+}
+
+let currentSort = {
+    column: 'DataGerarLink', // Coluna padrão
+    direction: 'desc'        // Ordem padrão (mais recente primeiro)
+};
+
+// --- FUNÇÃO DE ORDENAÇÃO (CHAMADA PELO CLIQUE NO CABEÇALHO) ---
+window.sortTable = function(column) {
+    // Se clicar na mesma coluna, inverte a direção
+    if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        // Se for nova coluna, começa ascendente
+        currentSort.column = column;
+        currentSort.direction = 'asc';
+    }
+
+    // Atualiza os ícones visuais (Opcional, mas recomendado)
+    updateSortIcons();
+
+    // Chama o filtro novamente para aplicar a nova ordem e renderizar
+    window.filterList();
+}
+
+// Função auxiliar para atualizar setinhas nos cabeçalhos (Visual)
+function updateSortIcons() {
+    // Reseta todos os ícones para neutro
+    document.querySelectorAll('.sort-icon').forEach(icon => icon.textContent = '↕');
+    
+    // Define o ícone da coluna atual
+    const activeIcon = document.getElementById(`icon-${currentSort.column}`);
+    if (activeIcon) {
+        activeIcon.textContent = currentSort.direction === 'asc' ? '▲' : '▼';
+    }
 }

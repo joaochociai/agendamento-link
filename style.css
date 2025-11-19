@@ -439,7 +439,7 @@ h1 {
 /* Tabela de Detalhes */
 .details-table { width: 100%; border-collapse: collapse; }
 .details-table tr { border-bottom: 1px solid #f0f0f0; }
-.details-table tr:last-child { border-bottom: none; }
+.details-table tr:last-child { border-bottom: none;}
 .details-table th { text-align: left; padding: 12px 5px; color: #6c757d; font-weight: 600; width: 35%; }
 .details-table td { text-align: right; padding: 12px 5px; color: #343a40; font-weight: 600; }
 
@@ -551,7 +551,7 @@ h1 {
     width: 100%;
     border-collapse: collapse;
     font-size: 15px;
-    min-width: 800px; /* Garante que não esmague em telas pequenas */
+    min-width: 900px; /* Garante que não esmague em telas pequenas */
 }
 
 .styled-table thead tr {
@@ -560,9 +560,20 @@ h1 {
     text-align: left;
 }
 
-.styled-table th, 
+.styled-table th:nth-child(3) {
+    white-space: normal; /* Permite que o texto "Curso" e o ícone quebrem linha se necessário */
+    max-width: 150px; /* Define uma largura mínima para não ficar muito espremido */
+}
+
+.styled-table th {
+    white-space: nowrap; /* Padrão: texto em uma linha */
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
 .styled-table td {
     padding: 12px 15px;
+    vertical-align: middle;
 }
 
 .styled-table tbody tr {
@@ -594,3 +605,23 @@ h1 {
     background-color: #007bff;
     color: white;
 }
+
+/* Estilo para cabeçalho ordenável */
+.styled-table th.sortable {
+    cursor: pointer;
+    user-select: none; /* Evita selecionar o texto ao clicar rápido */
+    transition: background-color 0.2s;
+}
+
+.styled-table th.sortable:hover {
+    background-color: #0056b3; /* Azul um pouco mais escuro no hover */
+}
+
+/* Estilo do ícone (setinha) */
+.sort-icon {
+    font-size: 0.8em;
+    margin-left: 8px;
+    opacity: 0.7;
+    display: inline-block;
+}
+

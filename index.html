@@ -109,11 +109,21 @@
                     <table class="styled-table">
                         <thead>
                             <tr>
-                                <th>Data Link</th>
-                                <th>Aluno</th>
-                                <th>Curso</th>
-                                <th>Valor</th>
-                                <th>Vencimento</th>
+                                <th class="sortable" onclick="window.sortTable('DataGerarLink')">
+                                    Gerar Link <span id="icon-DataGerarLink" class="sort-icon">▼</span>
+                                </th>
+                                <th class="sortable" onclick="window.sortTable('Nome')">
+                                    Aluno <span id="icon-Nome" class="sort-icon">↕</span>
+                                </th>
+                                <th class="sortable" onclick="window.sortTable('Curso')">
+                                    Curso <span id="icon-Curso" class="sort-icon">↕</span>
+                                </th>
+                                <th class="sortable" onclick="window.sortTable('ValorParcela')">
+                                    Valor <span id="icon-ValorParcela" class="sort-icon">↕</span>
+                                </th>
+                                <th class="sortable" onclick="window.sortTable('DataVencimento')">
+                                    Vencimento <span id="icon-DataVencimento" class="sort-icon">↕</span>
+                                </th>
                                 <th style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
